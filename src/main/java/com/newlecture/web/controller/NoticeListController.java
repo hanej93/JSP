@@ -28,7 +28,7 @@ public class NoticeListController extends HttpServlet{
 		List<Notice> list = new ArrayList<Notice>();
 		
 		String url = "jdbc:mysql://localhost/newlecture";
-		String sql = "select * from notice";
+		String sql = "select * from notice order by regDate desc";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
