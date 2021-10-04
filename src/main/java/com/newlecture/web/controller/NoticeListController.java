@@ -17,56 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.service.NoticeService;
 
 @WebServlet("/notice/list")
 public class NoticeListController extends HttpServlet{
 	
+	NoticeService service = new NoticeService();
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Notice> list = new ArrayList<Notice>();
+		List<Notice> list = service.getNoticeList();
 		
-		String url = "jdbc:mysql://localhost/newlecture";
-		String sql = "select * from notice order by regDate desc";
 		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url,"root","mysql");
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-
-			while(rs.next()){
-				int id = rs.getInt("id");
-				String title = rs.getString("title");
-				Date regDate = rs.getDate("regdate");
-				String writerId = rs.getString("writer_id");
-				int hit = rs.getInt("hit");
-				String files = rs.getString("files");
-				String content = rs.getString("content");
-				
-				Notice notice = new Notice(
-						id,
-						title,
-						regDate,
-						writerId,
-						hit,
-						files,
-						content);
-				list.add(notice);
-			}
-			
-			
-			rs.close();
-			st.close();
-			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		request.setAttribute("list", list);
 		
