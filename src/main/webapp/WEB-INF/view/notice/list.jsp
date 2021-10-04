@@ -199,13 +199,13 @@
 				</table>
 			</div>
 			
-			<c:set var="page" value="${(param.p == null)?1:param.p }"/>
+			<c:set var="page" value="${(empty param.p)?1:param.p }"/>
 			<c:set var="startNum" value="${page-(page-1)%5 }"/>
 			<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(count/10),'.') }"/>
 			
 			<div class="indexer margin-top align-right">
 				<h3 class="hidden">현재 페이지</h3>
-				<div><span class="text-orange text-strong">${(empty param.p)?1:param.p }</span> / ${lastNum } pages</div>
+				<div><span class="text-orange text-strong">${page }</span> / ${lastNum } pages</div>
 			</div>
 
 			<div class="margin-top align-center pager">	
