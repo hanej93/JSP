@@ -27,20 +27,23 @@ public class NoticeListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		
 		String field_ = request.getParameter("f");
 		String query_ = request.getParameter("q");
+		String page_ = request.getParameter("p");
 		
 		String field = "title";
-		if(field_ != null)
+		if(field_ != null && !field_.equals(""))
 			field = field_;
 		
 		String query = "";
-		if(query_ != null)
+		if(query_ != null && !query_.equals(""))
 			query = query_;
 		
-		List<Notice> list = service.getNoticeList(field, query, 1);
+		int page = 1;
+		if(page_ != null && !page_.equals(""))
+			page = Integer.parseInt(page_);
+		
+		List<Notice> list = service.getNoticeList(field, query, page);
 		
 		
 		
