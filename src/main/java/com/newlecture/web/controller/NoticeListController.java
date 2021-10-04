@@ -44,10 +44,12 @@ public class NoticeListController extends HttpServlet{
 			page = Integer.parseInt(page_);
 		
 		List<Notice> list = service.getNoticeList(field, query, page);
-		
+		int count = service.getNoticeCount(field, query);
 		
 		
 		request.setAttribute("list", list);
+		request.setAttribute("count", count);
+		
 		
 		request
 		.getRequestDispatcher("/WEB-INF/view/notice/list.jsp")
