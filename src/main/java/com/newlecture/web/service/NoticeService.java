@@ -36,7 +36,7 @@ public class NoticeService {
 		List<Notice> list = new ArrayList<>();
 		
 		String sql = "select * from("
-					+ "		select row_number() over (order by regdate desc) num,"
+					+ "		select row_number() over (order by regdate desc, id desc) num,"
 					+ "		notice.* from notice where " + field + " like ? "
 					+ "	) N "
 					+ "where num between ? and ?";
@@ -100,7 +100,7 @@ public class NoticeService {
 		int count = 0;
 		
 		String sql = "select count(id) as count from("
-				+ "		select row_number() over (order by regdate desc) num,"
+				+ "		select row_number() over (order by regdate desc, id desc) num,"
 				+ "		notice.* from notice where " + field + " like ? "
 				+ "	) N ";
 		
