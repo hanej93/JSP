@@ -22,7 +22,7 @@ public class NoticeService {
 //					+ "	N1.* FROM "
 //					+ "	(select * from notice order by regdate desc) N1,"
 //					+ "	(select @rownum := 0) r "
-//					+ ") N2"
+//					+ ") N2 "
 //					+ "where num between 6 and 10";
 
 		String sql = "select * from("
@@ -40,22 +40,37 @@ public class NoticeService {
 	}
 
 	public int getNoticeCount(String field, String query) {
-
+		String sql = "select * from("
+				+ "		select row_number() over (order by regdate desc) num,"
+				+ "		notice.* from notice"
+				+ "	) N "
+				+ " where num between 6 and 10";
 		return 0;
 	}
 
 	public Notice getNotice(int id) {
-
+		String sql = "select * from notice where id = ?";
 		return null;
 	}
 
 	public Notice getNextNotice(int id) {
-
+		String sql = "select * from notice"
+					+ " where id = ("
+					+ "		select id from notice "
+					+ "		where regdate > (select regdate from notice where id = 3)"
+					+ "		limit 1"
+					+ ")";
 		return null;
 	}
 
 	public Notice getPrevNotice(int id) {
-
+		String sql = "select * from notice"
+				+ " where id = ("
+				+ "		select id from notice "
+				+ "		where regdate < (select regdate from notice where id = 3)"
+				+ "		order by id limit 1"
+				+ ")";
+		
 		return null;
 	}
 }
