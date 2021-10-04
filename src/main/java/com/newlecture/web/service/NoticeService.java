@@ -96,37 +96,194 @@ public class NoticeService {
 	}
 
 	public int getNoticeCount(String field, String query) {
-		String sql = "select * from("
+		
+		int count = 0;
+		
+		String sql = "select count(id) as count from("
 				+ "		select row_number() over (order by regdate desc) num,"
-				+ "		notice.* from notice"
-				+ "	) N "
-				+ " where num between 6 and 10";
-		return 0;
+				+ "		notice.* from notice where " + field + " like ? "
+				+ "	) N ";
+		
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			PreparedStatement st = con.prepareStatement(sql);
+			
+			st.setString(1, "%"+query+"%");
+			
+			ResultSet rs = st.executeQuery();
+
+			count = rs.getInt("count");
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
 	}
 
 	public Notice getNotice(int id) {
+		
+		Notice notice = null;
+		
 		String sql = "select * from notice where id = ?";
-		return null;
+		
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+
+			if(rs.next()){
+				int nid = rs.getInt("id");
+				String title = rs.getString("title");
+				Date regDate = rs.getDate("regdate");
+				String writerId = rs.getString("writer_id");
+				int hit = rs.getInt("hit");
+				String files = rs.getString("files");
+				String content = rs.getString("content");
+				
+				notice = new Notice(
+						nid,
+						title,
+						regDate,
+						writerId,
+						hit,
+						files,
+						content);
+			}
+			
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return notice;
 	}
 
 	public Notice getNextNotice(int id) {
+		
+		Notice notice = null;
+		
 		String sql = "select * from notice"
 					+ " where id = ("
 					+ "		select id from notice "
-					+ "		where regdate > (select regdate from notice where id = 3)"
+					+ "		where regdate > (select regdate from notice where id = ?)"
 					+ "		limit 1"
 					+ ")";
-		return null;
+		
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+
+			if(rs.next()){
+				int nid = rs.getInt("id");
+				String title = rs.getString("title");
+				Date regDate = rs.getDate("regdate");
+				String writerId = rs.getString("writer_id");
+				int hit = rs.getInt("hit");
+				String files = rs.getString("files");
+				String content = rs.getString("content");
+				
+				notice = new Notice(
+						nid,
+						title,
+						regDate,
+						writerId,
+						hit,
+						files,
+						content);
+			}
+			
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return notice;
 	}
 
 	public Notice getPrevNotice(int id) {
+		
+		Notice notice = null;
+		
 		String sql = "select * from notice"
 				+ " where id = ("
 				+ "		select id from notice "
-				+ "		where regdate < (select regdate from notice where id = 3)"
+				+ "		where regdate < (select regdate from notice where id = ?)"
 				+ "		order by id limit 1"
 				+ ")";
 		
-		return null;
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+
+			if(rs.next()){
+				int nid = rs.getInt("id");
+				String title = rs.getString("title");
+				Date regDate = rs.getDate("regdate");
+				String writerId = rs.getString("writer_id");
+				int hit = rs.getInt("hit");
+				String files = rs.getString("files");
+				String content = rs.getString("content");
+				
+				notice = new Notice(
+						nid,
+						title,
+						regDate,
+						writerId,
+						hit,
+						files,
+						content);
+			}
+			
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return notice;
 	}
 }
