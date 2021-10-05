@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -333,4 +334,41 @@ public class NoticeService {
 		
 		return notice;
 	}
+
+	public int deleteNoticeAll(int[] ids) {
+
+		int result = 0;
+
+		String params = "";
+		
+		for (int i = 0; i < ids.length; i++) {
+			params += ids[i];
+			if(i < ids.length-1)
+				params += ",";
+		}
+		
+		String sql = "delete notice where id in ("+ params+")";
+		
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			Statement st = con.createStatement();
+			result = st.executeUpdate(sql);
+
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	
 }
