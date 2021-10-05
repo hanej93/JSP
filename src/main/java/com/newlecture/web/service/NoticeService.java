@@ -5,25 +5,25 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
-	public List<Notice> getNoticeList() {
+	public List<NoticeView> getNoticeList() {
 
 		return getNoticeList("title", "", 1);
 	}
 
-	public List<Notice> getNoticeList(int page) {
+	public List<NoticeView> getNoticeList(int page) {
 
 		return getNoticeList("title", "", page);
 	}
 
-	public List<Notice> getNoticeList(String field, String query, int page) {
+	public List<NoticeView> getNoticeList(String field, String query, int page) {
 		
 //		String sql = "select * from ("
 //					+ "	select @rownum := @rownum+1 as num,"
@@ -33,13 +33,24 @@ public class NoticeService {
 //					+ ") N2 "
 //					+ "where num between 6 and 10";
 
-		List<Notice> list = new ArrayList<>();
+		List<NoticeView> list = new ArrayList<>();
+		
+		// view 테이블 쿼리문
+//		create view notice_view
+//		as 
+//		select N.*, count(C.id) cmt_count
+//		from notice N
+//			left join comment C on N.id = C.notice_id
+//			group by n.id, n.title, n.writer_id, n.regdate, n.hit, n.files;
+
 		
 		String sql = "select * from("
 					+ "		select row_number() over (order by regdate desc, id desc) num,"
-					+ "		notice.* from notice where " + field + " like ? "
+					+ "		nv.* from notice_view nv where " + field + " like ? "
 					+ "	) N "
 					+ "where num between ? and ?";
+		
+		
 		
 		// 1, 11, 21, 31 -> an = 1+(page-1)*10
 		// 10, 20, 30, 40 -> page*10
@@ -62,16 +73,18 @@ public class NoticeService {
 				String writerId = rs.getString("writer_id");
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files");
-				String content = rs.getString("content");
+				//String content = rs.getString("content");
+				int cmtCount = rs.getInt("cmt_count");
 				
-				Notice notice = new Notice(
+				NoticeView notice = new NoticeView(
 						id,
 						title,
 						regDate,
 						writerId,
 						hit,
 						files,
-						content);
+						//content,
+						cmtCount);
 				list.add(notice);
 			}
 			
