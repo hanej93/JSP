@@ -44,7 +44,7 @@ public class ListController extends HttpServlet{
 		if(page_ != null && !page_.equals(""))
 			page = Integer.parseInt(page_);
 		
-		List<NoticeView> list = service.getNoticeList(field, query, page);
+		List<NoticeView> list = service.getNoticeViewList(field, query, page);
 		int count = service.getNoticeCount(field, query);
 		
 		

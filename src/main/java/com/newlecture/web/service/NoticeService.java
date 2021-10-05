@@ -13,17 +13,48 @@ import com.newlecture.web.entity.Notice;
 import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
-	public List<NoticeView> getNoticeList() {
+	
+	public int removeNoticeAll(int[] ids){
+		
+		return 0;
+	}
+	
+	public int pubNoticeAll(int[] ids){
+		
+		return 0;
+	}
+	
+	public int insertNotice(Notice notice){
+		
+		return 0;
+	}
+	
+	public int deleteNotice(int id){
+		
+		return 0;
+	}
+	
+	public int updateNotice(Notice notice){
+		
+		return 0;
+	}
+	
+	List<Notice> getNoticeNewestList(){
+		
+		return null;
+	}
+	
+	public List<NoticeView> getNoticeViewList() {
 
-		return getNoticeList("title", "", 1);
+		return getNoticeViewList("title", "", 1);
 	}
 
-	public List<NoticeView> getNoticeList(int page) {
+	public List<NoticeView> getNoticeViewList(int page) {
 
-		return getNoticeList("title", "", page);
+		return getNoticeViewList("title", "", page);
 	}
 
-	public List<NoticeView> getNoticeList(String field, String query, int page) {
+	public List<NoticeView> getNoticeViewList(String field, String query, int page) {
 		
 //		String sql = "select * from ("
 //					+ "	select @rownum := @rownum+1 as num,"
