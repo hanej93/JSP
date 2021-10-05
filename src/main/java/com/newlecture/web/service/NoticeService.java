@@ -107,6 +107,7 @@ public class NoticeService {
 				String files = rs.getString("files");
 				//String content = rs.getString("content");
 				int cmtCount = rs.getInt("cmt_count");
+				boolean pub = rs.getBoolean("pub");
 				
 				NoticeView notice = new NoticeView(
 						id,
@@ -115,6 +116,7 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
+						pub,
 						//content,
 						cmtCount);
 				list.add(notice);
@@ -201,6 +203,7 @@ public class NoticeService {
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files");
 				String content = rs.getString("content");
+				boolean pub = rs.getBoolean("pub");
 				
 				notice = new Notice(
 						nid,
@@ -209,7 +212,8 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
-						content);
+						content,
+						pub);
 			}
 			
 			
@@ -255,6 +259,7 @@ public class NoticeService {
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files");
 				String content = rs.getString("content");
+				boolean pub = rs.getBoolean("pub");
 				
 				notice = new Notice(
 						nid,
@@ -263,7 +268,8 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
-						content);
+						content,
+						pub);
 			}
 			
 			
@@ -309,6 +315,7 @@ public class NoticeService {
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files");
 				String content = rs.getString("content");
+				boolean pub = rs.getBoolean("pub");
 				
 				notice = new Notice(
 						nid,
@@ -317,7 +324,8 @@ public class NoticeService {
 						writerId,
 						hit,
 						files,
-						content);
+						content,
+						pub);
 			}
 			
 			
