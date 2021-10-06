@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import com.newlecture.web.entity.Notice;
 import com.newlecture.web.service.NoticeService;
@@ -39,6 +40,13 @@ public class RegController extends HttpServlet{
 		
 		String content = request.getParameter("content");
 		String isOpen = request.getParameter("open");
+		
+		Part filePart = request.getPart("file");
+		filePart.getInputStream();
+		
+		String realPath = request.getServletContext().getRealPath("/upload");
+		System.out.println(realPath);
+		
 		boolean pub = false;
 		if(isOpen != null)
 			pub = true;
@@ -50,7 +58,7 @@ public class RegController extends HttpServlet{
 		notice.setWriterId("newlec");
 		
 		NoticeService service = new NoticeService();
-		int result = service.insertNotice(notice);
+		//int result = service.insertNotice(notice);
 
 		response.sendRedirect("list");
 		
