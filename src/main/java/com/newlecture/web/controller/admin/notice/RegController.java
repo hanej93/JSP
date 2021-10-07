@@ -48,6 +48,7 @@ public class RegController extends HttpServlet{
 		StringBuilder builder = new StringBuilder();
 		for(Part p : parts) {
 			if(!p.getName().equals("file")) continue;
+			if(p.getSize() == 0) continue;
 			
 			Part filePart = p;
 			String fileName = filePart.getSubmittedFileName();
@@ -58,6 +59,10 @@ public class RegController extends HttpServlet{
 			
 			String realPath = request.getServletContext().getRealPath("/upload");
 			System.out.println(realPath);
+			
+			File path = new File(realPath);
+			if(!path.exists())
+				path.mkdirs();
 			
 			String filePath = realPath + File.separator + fileName;
 			FileOutputStream fos = new FileOutputStream(filePath);
