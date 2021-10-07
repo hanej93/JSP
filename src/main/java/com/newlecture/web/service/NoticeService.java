@@ -164,6 +164,71 @@ public class NoticeService {
 		
 		return list;
 	}
+	
+	public List<NoticeView> getNoticePubList(String field, String query, int page) {
+List<NoticeView> list = new ArrayList<>();
+		
+		
+		String sql = "select * from("
+					+ "		select row_number() over (order by regdate desc, id desc) num,"
+					+ "		nv.* from notice_view nv where " + field + " like ? "
+					+ "	) N "
+					+ "where pub=1 and num between ? and ?";
+		
+		
+		
+		// 1, 11, 21, 31 -> an = 1+(page-1)*10
+		// 10, 20, 30, 40 -> page*10
+		
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, "%"+query+"%");
+			st.setInt(2, 1+(page-1)*10);
+			st.setInt(3, page*10);
+			ResultSet rs = st.executeQuery();
+
+			while(rs.next()){
+				int id = rs.getInt("id");
+				String title = rs.getString("title");
+				Date regDate = rs.getDate("regdate");
+				String writerId = rs.getString("writer_id");
+				int hit = rs.getInt("hit");
+				String files = rs.getString("files");
+				//String content = rs.getString("content");
+				int cmtCount = rs.getInt("cmt_count");
+				boolean pub = rs.getBoolean("pub");
+				
+				NoticeView notice = new NoticeView(
+						id,
+						title,
+						regDate,
+						writerId,
+						hit,
+						files,
+						pub,
+						//content,
+						cmtCount);
+				list.add(notice);
+			}
+			
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 
 	public int getNoticeCount() {
 
@@ -405,6 +470,8 @@ public class NoticeService {
 		
 		return result;
 	}
+
+	
 
 	
 }

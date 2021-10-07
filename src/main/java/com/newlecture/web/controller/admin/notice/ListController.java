@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -33,19 +34,35 @@ public class ListController extends HttpServlet{
 		String[] openIds = request.getParameterValues("open-id");
 		String[] delIds = request.getParameterValues("del-id");
 		String cmd = request.getParameter("cmd");
+		String ids_ = request.getParameter("ids");
+		String[] ids = ids_.trim().split(" "); 
 		
 		switch(cmd) {
 		case "일괄공개":
 			for(String openId : openIds) {
 				System.out.printf("open id : %s\n", openId);
 			}
+			
+			List<String> oids = Arrays.asList(openIds);
+			// 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 - // 3, 5, 8
+			// 1,2,4,6,7,9,10
+			List<String> cids = new ArrayList(Arrays.asList(ids));
+			cids.removeAll(oids);
+			System.out.println(Arrays.asList(ids));
+			System.out.println(oids);
+			System.out.println(cids);
+			
+			
+//			service.pubNoticeList(opnIds); // update notice set pub = 1 where id in ( ... ) 
+//			service.closeNoticeList(clsIds);
+			
 			break;
 		case "일괄삭제":
-			int[] ids = new int[delIds.length];
+			int[] ids1 = new int[delIds.length];
 			for (int i = 0; i < delIds.length; i++) {
-				ids[i] = Integer.parseInt(delIds[i]);
+				ids1[i] = Integer.parseInt(delIds[i]);
 			}
-			int result = service.deleteNoticeAll(ids);
+			int result = service.deleteNoticeAll(ids1);
 			break;
 		}
 		
