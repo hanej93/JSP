@@ -180,7 +180,7 @@
 											<c:set var="style" value="font-weight: bold;color:red;" />
 										</c:if>
 
-										<a href="${fileName }" style="${style}">${fn:toUpperCase(fileName)  }</a>
+										<a download href="/upload/${fileName }" style="${style}">${fn:toUpperCase(fileName)  }</a>
 										<c:if test="${not st.last }">
 											/
 											</c:if>

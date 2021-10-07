@@ -28,8 +28,8 @@ public class NoticeService {
 	public int insertNotice(Notice notice){
 		int result = 0;
 		
-		String sql = "insert into notice(title, content, writer_id, pub)"
-				+ " values(?, ?, ?, ?)";
+		String sql = "insert into notice(title, content, writer_id, pub, files)"
+				+ " values(?, ?, ?, ?, ?)";
 		
 		String url = "jdbc:mysql://localhost/newlecture";
 		
@@ -41,6 +41,7 @@ public class NoticeService {
 			st.setString(2, notice.getContent());
 			st.setString(3, notice.getWriterId());
 			st.setBoolean(4, notice.getPub());
+			st.setString(5, notice.getFiles());
 			
 			result = st.executeUpdate();
 
