@@ -46,8 +46,34 @@ public class NoticeService {
 	
 	public int pubNoticeAll(String oidsCSV, String cidsCSV){
 		
-		String sql1 = "update notice set pub = 1 where id in (?)";
-		return 0;
+		int result = 0;
+		
+		String sqlOpen = String.format("update notice set pub = 1 where id in (%s)", oidsCSV);
+		String sqlClose = String.format("update notice set pub = 0 where id in (%s)", cidsCSV);
+		
+		String url = "jdbc:mysql://localhost/newlecture";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url,"root","mysql");
+			Statement stOpen = con.createStatement();
+			result += stOpen.executeUpdate(sqlOpen);
+			
+			Statement stClose = con.createStatement();
+			result += stClose.executeUpdate(sqlClose);
+			
+			stOpen.close();
+			stClose.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	public int insertNotice(Notice notice){
